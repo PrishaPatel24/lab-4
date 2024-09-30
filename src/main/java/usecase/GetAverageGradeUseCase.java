@@ -1,8 +1,13 @@
 package usecase;
 
 import api.GradeDataBase;
+import api.MongoGradeDataBase;
 import entity.Grade;
 import entity.Team;
+
+import java.lang.reflect.Member;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GetAverageGradeUseCase class.
@@ -26,12 +31,18 @@ public final class GetAverageGradeUseCase {
         // TODO Task 3b: Go to the MongoGradeDataBase class and implement getMyTeam.
         final Team team = gradeDataBase.getMyTeam();
         // Call the API to get all the grades for the course for all your team members
-        // TODO Task 3a: Complete the logic of calculating the average course grade for
+        // Task 3a: Complete the logic of calculating the average course grade for
         //              your team members. Hint: the getGrades method might be useful.
+        count = team.getMembers().length;
 
         if (count == 0) {
             return 0;
         }
-        return sum / count;
+        else {
+            for (final String member : team.getMembers()) {
+                sum += gradeDataBase.getGrade(member, course).getGrade();
+            }
+            return sum / count;
+        }
     }
 }
